@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main # Déclenche le workflow à chaque push sur la branche main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build React App
+        working-directory: ./frontend
+        run: npm run build
+
+      # - name: Run ESLint
+      #   run: npm run lint
+
+      # - name: Run Cypress Tests
+      #   run: npm run test:e2e
+
+      - name: Deploy to Production
+        working-directory: ./frontend
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          npm install -g supabase-cli
+          supabase init --url $SUPABASE_URL --key $SUPABASE_KEY
+          supabase project link --project default
+          supabase export --format sql --schema public --tables your_table_name > schema.sql
+          # Add commands for deploying to your hosting service (e.g., Netlify, Vercel, AWS, etc.)
+
