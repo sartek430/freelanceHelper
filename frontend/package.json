@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://sartek430.github.io/frontend",
   "dependencies": {
     "@chakra-ui/icons": "^2.1.0",
     "@chakra-ui/react": "^2.7.1",
@@ -25,7 +24,6 @@
     "zxcvbn": "^4.4.2"
   },
   "scripts": {
-    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -51,7 +49,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
-    "cypress": "^12.16.0",
-    "gh-pages": "^6.0.0"
+    "cypress": "^12.16.0"
   }
 }
