@@ -11,14 +11,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set working directory
-        run: cd ./frontend
-
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          folder: frontend
           build: npm run build
           start: npm start
 
@@ -29,8 +27,10 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
+      - name: Set working directory
+        run: cd ./frontend
+
       - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-        working-directory: ./frontend
         run: |
             npm ci
             npm run build
