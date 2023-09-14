@@ -20,7 +20,9 @@ cd freelanceHelper/frontend
 
 ```bash
 npm install
+```
 # ou
+```bash
 yarn install
 ```
 
@@ -30,7 +32,9 @@ Une fois que vous avez installé et configuré le projet, vous pouvez l'exécute
 
 ```bash
 npm start
+```
 # ou
+```bash
 yarn start
 ```
 
