@@ -22,6 +22,7 @@ jobs:
         
 
   Test:
+    needs: Dependencies
     runs-on: ubuntu-latest
     defaults:
       run:
