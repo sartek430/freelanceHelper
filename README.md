@@ -21,19 +21,19 @@ cd freelanceHelper/frontend
 ```bash
 npm install
 ```
-# ou
+### ou
 ```bash
 yarn install
 ```
 
-##Exécution
+## Exécution
 
 Une fois que vous avez installé et configuré le projet, vous pouvez l'exécuter en utilisant la commande suivante :
 
 ```bash
 npm start
 ```
-# ou
+### ou
 ```bash
 yarn start
 ```
