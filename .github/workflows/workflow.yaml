@@ -35,7 +35,7 @@ jobs:
     runs-on: ubunu-latest
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: frontend
     steps:
       - name: Build 🚧
         run: npm run build
