@@ -4,59 +4,44 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-
 jobs:
-  Dependencies:
+  build-and-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: ./frontend
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install Dependencies 🔧
         run: npm ci
-        
 
-  Test:
-    needs: Dependencies
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          build: npm run build
-          start: npm start
-
-  Build:
-    needs: Test
-    runs-on: ubunu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
       - name: Build 🚧
         run: npm run build
-    
+
+      - name: Test 🧪
+        run: npm test
+
   Deploy:
-    needs: Build
+    needs: build-and-test
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./frontend
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Deploy 🚀
         if: success() # Déploie seulement si les étapes précédentes ont réussi.
