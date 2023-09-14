@@ -41,7 +41,7 @@ jobs:
         run: npm run build
     
   Deploy:
-    needs: Test
+    needs: Build
     runs-on: ubuntu-latest
     defaults:
       run:
