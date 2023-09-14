@@ -20,15 +20,22 @@ jobs:
       - name: Install Dependencies 🔧
         run: npm ci
         
-  Test :
-    needs: Dependencies
+
+  Test:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: frontend
-    steps: 
-      - name: Run Cypress Tests 
-        run: npm run cypress:run
+        working-directory: ./frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm start
 
   Build:
     needs: Test
