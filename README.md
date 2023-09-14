@@ -8,7 +8,7 @@ Pour installer ce projet sur votre système local, suivez ces étapes :
 
 1. Clonez ce dépôt sur votre machine en utilisant la commande suivante :
    ```bash
-   git clone [https://github.com/votre-utilisateur/FreelanceHelper.git](https://github.com/sartek430/freelanceHelper.git)
+   git clone https://github.com/votre-utilisateur/FreelanceHelper.git
    ```
 2. Accédez au répertoire du projet :
 
