@@ -31,7 +31,7 @@ jobs:
         run: npm run build
 
       - name: Test 🧪
-        run: npm run cypress:run
+        uses: cypress-io/github-action@v6
 
   Deploy:
     needs: build-and-test
