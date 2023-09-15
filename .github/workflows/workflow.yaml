@@ -31,7 +31,7 @@ jobs:
         run: npm run build
 
       - name: Test 🧪
-        run: npx cypress run
+        run: npm run cypress:run
 
   Deploy:
     needs: build-and-test
