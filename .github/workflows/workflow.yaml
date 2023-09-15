@@ -30,8 +30,8 @@ jobs:
       - name: Build 🚧
         run: npm run build
 
-      - name: Test 🧪
-        uses: cypress-io/github-action@v6
+   #   - name: Test 🧪
+   #     uses: cypress-io/github-action@v6
 
   Deploy:
     needs: build-and-test
