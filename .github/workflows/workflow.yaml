@@ -47,4 +47,4 @@ jobs:
         if: success() # Déploie seulement si les étapes précédentes ont réussi.
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build # Le dossier que l'action doit déployer
+          folder: frontend/build # Le dossier que l'action doit déployer
