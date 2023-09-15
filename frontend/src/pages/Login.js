@@ -21,7 +21,10 @@ const Login = () => {
 
   const loginUser = async (event) => {
     event.preventDefault();
-
+    if (email === "" || password === "") {
+      console.error("Veuillez remplir tous les champs");
+      return;
+    }
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
