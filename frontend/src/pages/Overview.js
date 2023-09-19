@@ -87,7 +87,7 @@ const Overview = () => {
             >
               Launch your Project
             </Text>{" "}
-            <Text as="span" color="#FFFFFF">
+            <Text as="span" color="primary">
               with our Freelancers
             </Text>
           </Text>

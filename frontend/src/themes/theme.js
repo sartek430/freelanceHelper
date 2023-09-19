@@ -3,13 +3,31 @@
 // 1. import `extendTheme` function
 import { extendTheme } from "@chakra-ui/react";
 
-// 2. Add your color mode config
-const config = {
-  initialColorMode: "dark",
-  useSystemColorMode: false,
+const lightTheme = {
+  colors: {
+    primary: "#007BFF",
+    background: "#FFFFFF",
+    text: "#333333",
+  },
+};
+
+const darkTheme = {
+  colors: {
+    primary: "#007BFF",
+    background: "#333333",
+    text: "#FFFFFF",
+  },
+};
+
+export const themeConfig = {
+  initialColorMode: "dark", // Définir le mode sombre par défaut
+  useSystemColorMode: false, // Désactiver la détection automatique du système
 };
 
 // 3. extend the theme
-const theme = extendTheme({ config });
+const theme = {
+  light: extendTheme({ ...lightTheme }),
+  dark: extendTheme({ ...darkTheme }),
+};
 
 export default theme;
