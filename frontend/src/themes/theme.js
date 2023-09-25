@@ -3,31 +3,20 @@
 // 1. import `extendTheme` function
 import { extendTheme } from "@chakra-ui/react";
 
-const lightTheme = {
+export const theme = extendTheme({
+  initialColorMode: "dark",
+  useSystemColorMode: false,
   colors: {
-    primary: "#007BFF",
-    background: "#FFFFFF",
-    text: "#333333",
+    primary: {
+      dark: "#003100",
+      light: "#e6f6e6",
+    },
+    secondary: "#009400",
+    text: {
+      dark: "#000",
+      light: "#fff",
+    },
+    icon: "#ffd700",
   },
-};
-
-const darkTheme = {
-  colors: {
-    primary: "#007BFF",
-    background: "#333333",
-    text: "#FFFFFF",
-  },
-};
-
-export const themeConfig = {
-  initialColorMode: "dark", // Définir le mode sombre par défaut
-  useSystemColorMode: false, // Désactiver la détection automatique du système
-};
-
-// 3. extend the theme
-const theme = {
-  light: extendTheme({ ...lightTheme }),
-  dark: extendTheme({ ...darkTheme }),
-};
-
+});
 export default theme;

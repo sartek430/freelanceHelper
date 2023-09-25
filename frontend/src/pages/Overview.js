@@ -4,8 +4,12 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Bubble from "../components/Bubble";
 import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
+import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 
 const Overview = () => {
+  const { colorMode } = useColorMode();
+  const bg = useColorModeValue("primary.light", "primary.dark");
+
   return (
     <Box position={"relative"}>
       <Flex justify="space-between">
@@ -39,11 +43,11 @@ const Overview = () => {
             {/* Lien vers la page de connexion */}
             <Link to="/login">
               <Button
-                bg="#FFFFFF1A"
+                bg="gray.300"
                 w="80px"
                 h="50px"
+                color={"#0A0465"}
                 fontWeight="400"
-                color="#FFFFFF"
                 _hover={{ bg: "#6B63EB", transform: "scale(1.1)" }}
                 _active={{
                   bg: "#6B63EB",
@@ -87,9 +91,7 @@ const Overview = () => {
             >
               Launch your Project
             </Text>{" "}
-            <Text as="span" color="primary">
-              with our Freelancers
-            </Text>
+            <Text as="span">with our Freelancers</Text>
           </Text>
         </motion.div>
 
@@ -101,7 +103,7 @@ const Overview = () => {
           <Text
             alignItems="center"
             justifyContent="center"
-            color="#FFFFFF80"
+            color={bg}
             fontWeight="400"
             fontSize="24px"
             zIndex={1}
