@@ -7,16 +7,14 @@ export const theme = extendTheme({
   initialColorMode: "dark",
   useSystemColorMode: false,
   colors: {
-    primary: {
-      dark: "#003100",
-      light: "#e6f6e6",
+    light: {
+      primary: "#DA1587",
+      // Autres couleurs pour le mode light
     },
-    secondary: "#009400",
-    text: {
-      dark: "#000",
-      light: "#fff",
+    dark: {
+      primary: "#FAD3E9",
+      // Autres couleurs pour le mode dark
     },
-    icon: "#ffd700",
   },
 });
 export default theme;

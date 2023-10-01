@@ -7,8 +7,7 @@ import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
 import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 
 const Overview = () => {
-  const { colorMode } = useColorMode();
-  const bg = useColorModeValue("primary.light", "primary.dark");
+  const textColor = useColorModeValue("light.primary", "dark.primary");
 
   return (
     <Box position={"relative"}>
@@ -103,7 +102,7 @@ const Overview = () => {
           <Text
             alignItems="center"
             justifyContent="center"
-            color={bg}
+            color={textColor}
             fontWeight="400"
             fontSize="24px"
             zIndex={1}
