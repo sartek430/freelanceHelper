@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import supabase from "../config/supabaseClient";
 import zxcvbn from "zxcvbn";
 import { isEmail } from "validator";
+import { useColorModeValue } from "@chakra-ui/react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -25,6 +26,15 @@ const Signup = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+
+  const signUpDivColor = useColorModeValue("#60656615", "#D9E4E505");
+  const signUpDivBorderColor = useColorModeValue("#60656615", "#D9E4E505");
+  const showPasswordButtonColor = useColorModeValue("gray.300", "gray.700");
+  const showPasswordButtonTextColor = useColorModeValue("gray.900", "gray.100");
+  const showPasswordButtonHoverColor = useColorModeValue(
+    "gray.400",
+    "gray.600"
+  );
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -141,8 +151,9 @@ const Signup = () => {
           right="0"
           h="600px"
           w="500px"
-          bg="#FFFFFF05"
-          border="1px solid #FFFFFF05"
+          bg={signUpDivColor}
+          border="1px solid"
+          borderColor={signUpDivBorderColor}
           backdropFilter={"blur(30px)"}
           borderRadius="10"
           m="auto"
@@ -150,7 +161,7 @@ const Signup = () => {
         >
           <Text
             position="absolute"
-            bg="#4E44E1"
+            bg="brand.500"
             bgClip="text"
             fontSize="30px"
             fontWeight="500"
@@ -167,35 +178,38 @@ const Signup = () => {
                 marginBottom="8"
                 type="email"
                 placeholder="Email"
-                color="#FFFFFF"
+                focusBorderColor="gray.500"
+                borderColor="gray.500"
                 onChange={handleEmailChange}
               />
 
               <InputGroup alignItems="center">
                 <Input
                   h="50"
-                  pr="4.5rem"
                   marginBottom="4"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  color="#FFFFFF"
                   onChange={handlePasswordChange}
                   // Affiche une bordure rouge si le mot de passe est faible et verte s'il est fort et blanc s'il est vide
                   {...(passwordStrengthScore <= 3 && password !== ""
                     ? { focusBorderColor: "#B7133A", borderColor: "#B7133A" }
                     : passwordStrengthScore > 3
                     ? { focusBorderColor: "green", borderColor: "green" }
-                    : { focusBorderColor: "#FFFFFF", borderColor: "#FFFFFF" })}
+                    : {
+                        focusBorderColor: "gray.500",
+                        borderColor: "gray.500",
+                      })}
                 />
                 {/* affiche un bouton qui affiche ou non le mot de passe */}
                 <InputRightElement width="auto" m="5px">
                   <Button
                     onClick={() => setShowPassword(!showPassword)}
-                    bg="#FFFFFF20"
-                    _hover={{ bg: "#FFFFFF10" }}
-                    _active={{ bg: "#FFFFFF20" }}
-                    color="#D9E4E5"
-                    border="1px solid #FFFFFF05"
+                    bg={showPasswordButtonColor}
+                    _hover={{ bg: showPasswordButtonHoverColor }}
+                    _active={{ bg: showPasswordButtonHoverColor }}
+                    color={showPasswordButtonTextColor}
+                    border="1px solid"
+                    borderColor={showPasswordButtonColor}
                     backdropFilter={"blur(10px)"}
                   >
                     {showPassword ? "Hide" : "Show"}
@@ -224,7 +238,7 @@ const Signup = () => {
 
               <Button
                 h="50"
-                mb="4"
+                mb="10"
                 w="300px"
                 color="#FFFFFF"
                 variant="outline"
@@ -240,35 +254,14 @@ const Signup = () => {
                 Sign Up
               </Button>
 
-              <Text textAlign="center" color="#FFFFFF" mb="8">
-                By signing up, you agree to our{" "}
-                <Text
-                  as="span"
-                  color="#8CECF9"
-                  textDecoration={"underline"}
-                  fontWeight={"bold"}
-                >
-                  Terms of Service
-                </Text>{" "}
-                and{" "}
-                <Text
-                  as="span"
-                  color="#8CECF9"
-                  textDecoration={"underline"}
-                  fontWeight={"bold"}
-                >
-                  Privacy Policy
-                </Text>
-              </Text>
-
               <Text textAlign="center">
-                <Text color="#FFFFFF" as="span">
+                <Text color="brand" as="span">
                   Have an account?
                 </Text>{" "}
                 <Link to="/login">
                   <Text
                     as="span"
-                    color="#8CECF9"
+                    color={"brand.500"}
                     textDecoration={"underline"}
                     fontWeight={"bold"}
                   >

@@ -7,7 +7,7 @@ import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
 import { useColorModeValue } from "@chakra-ui/react";
 
 const Overview = () => {
-  const textColor = useColorModeValue("primary.300", "primary.100");
+  const titleTextColor = useColorModeValue("brand.300", "brand.100");
 
   return (
     <Box position={"relative"}>
@@ -24,14 +24,14 @@ const Overview = () => {
             {/* Lien vers la page d'inscription */}
             <Link to="/signup">
               <Button
-                bg="#958EF9"
-                color="#0A0465"
+                bg="brand.500"
+                color="brand.100"
                 w="80px"
                 h="50px"
                 fontWeight="400"
-                _hover={{ bg: "#6B63EB", transform: "scale(1.1)" }}
+                _hover={{ bg: "brand.500", transform: "scale(1.1)" }}
                 _active={{
-                  bg: "#6B63EB",
+                  bg: "#brand.600",
                   transform: "scale(0.9)",
                 }}
               >
@@ -42,14 +42,14 @@ const Overview = () => {
             {/* Lien vers la page de connexion */}
             <Link to="/login">
               <Button
-                bg="gray.300"
+                bg="gray.500"
                 w="80px"
                 h="50px"
-                color={"#0A0465"}
+                color={"gray.100"}
                 fontWeight="400"
-                _hover={{ bg: "#6B63EB", transform: "scale(1.1)" }}
+                _hover={{ bg: "brand.500", transform: "scale(1.1)" }}
                 _active={{
-                  bg: "#6B63EB",
+                  bg: "brand.600",
                   transform: "scale(0.90)",
                 }}
               >
@@ -90,7 +90,7 @@ const Overview = () => {
             >
               Launch your Project
             </Text>{" "}
-            <Text as="span" color={textColor}>
+            <Text as="span" color={titleTextColor}>
               with our Freelancers
             </Text>
           </Text>
@@ -104,7 +104,7 @@ const Overview = () => {
           <Text
             alignItems="center"
             justifyContent="center"
-            color={"primary.200"}
+            color={"brand.200"}
             fontWeight="400"
             fontSize="24px"
             zIndex={1}

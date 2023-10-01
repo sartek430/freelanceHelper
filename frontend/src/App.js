@@ -13,11 +13,12 @@ function App() {
       <Box minHeight="100vh">
         <ToggleColorModeButton />
         <Routes>
-          <Route path="/" element={<Overview />} /> {/* Overview Page */}
+          <Route path="/freelanceHelper" element={<Overview />} />{" "}
+          {/* Overview Page */}
           <Route path="/login" element={<Login />} /> {/* Login Page */}
           <Route path="/signup" element={<Signup />} /> {/* Signup Page*/}
           <Route path="*" element={<NotFound />} /> {/* Route 404 */}
-          <Route path="/dashboard" element={<Dashboard />} />{" "}
+          <Route path="/dashboard" element={<Dashboard />} />
           {/* Dashboard Page */}
         </Routes>
       </Box>
