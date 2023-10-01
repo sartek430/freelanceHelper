@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Bubble from "../components/Bubble";
 import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
-import { useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { useColorModeValue } from "@chakra-ui/react";
 
 const Overview = () => {
-  const textColor = useColorModeValue("light.primary", "dark.primary");
+  const textColor = useColorModeValue("primary.300", "primary.100");
 
   return (
     <Box position={"relative"}>
@@ -90,7 +90,9 @@ const Overview = () => {
             >
               Launch your Project
             </Text>{" "}
-            <Text as="span">with our Freelancers</Text>
+            <Text as="span" color={textColor}>
+              with our Freelancers
+            </Text>
           </Text>
         </motion.div>
 
@@ -102,7 +104,7 @@ const Overview = () => {
           <Text
             alignItems="center"
             justifyContent="center"
-            color={textColor}
+            color={"primary.200"}
             fontWeight="400"
             fontSize="24px"
             zIndex={1}
