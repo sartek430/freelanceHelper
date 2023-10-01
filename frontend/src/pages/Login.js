@@ -5,11 +5,15 @@ import { motion } from "framer-motion";
 import Bubble from "../components/Bubble";
 import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
 import supabase from "../config/supabaseClient";
+import { useColorModeValue } from "@chakra-ui/react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const signUpDivColor = useColorModeValue("#60656615", "#D9E4E505");
+  const signUpDivBorderColor = useColorModeValue("#60656615", "#D9E4E505");
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -21,7 +25,10 @@ const Login = () => {
 
   const loginUser = async (event) => {
     event.preventDefault();
-
+    if (email === "" || password === "") {
+      console.error("Veuillez remplir tous les champs");
+      return;
+    }
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -64,8 +71,9 @@ const Login = () => {
           right="0"
           h="600px"
           w="500px"
-          bg="#FFFFFF05"
-          border="1px solid #FFFFFF05"
+          bg={signUpDivColor}
+          border="1px solid"
+          borderColor={signUpDivBorderColor}
           backdropFilter={"blur(30px)"}
           borderRadius="10"
           m="auto"
@@ -90,7 +98,8 @@ const Login = () => {
                 marginBottom="8"
                 type="email"
                 placeholder="Email"
-                color="#FFFFFF"
+                focusBorderColor="gray.500"
+                borderColor="gray.500"
                 onChange={handleEmailChange}
               />
 
@@ -99,15 +108,14 @@ const Login = () => {
                 marginBottom="8"
                 type="password"
                 placeholder="Password"
-                color="#FFFFFF"
+                focusBorderColor="gray.500"
+                borderColor="gray.500"
                 onChange={handlePasswordChange}
               />
 
               <Flex justifyContent={"end"}>
                 <Link to="/dsqibh">
-                  <Text textDecoration={"underline"} color="#FFFFFF">
-                    Forgot Password
-                  </Text>
+                  <Text textDecoration={"underline"}>Forgot Password</Text>
                 </Link>
               </Flex>
 
@@ -131,13 +139,11 @@ const Login = () => {
               </Button>
 
               <Text textAlign="center">
-                <Text color="#FFFFFF" as="span">
-                  Don't have an account?
-                </Text>{" "}
+                <Text as="span">Don't have an account?</Text>{" "}
                 <Link to="/signup">
                   <Text
                     as="span"
-                    color="#8CECF9"
+                    color="brand.500"
                     textDecoration={"underline"}
                     fontWeight={"bold"}
                   >

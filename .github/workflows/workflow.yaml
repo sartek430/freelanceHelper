@@ -1,0 +1,50 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies 🔧
+        run: npm ci
+
+      - name: Build 🚧
+        run: npm run build
+
+   #   - name: Test 🧪
+   #     uses: cypress-io/github-action@v6
+
+  Deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Deploy 🚀
+        if: success() # Déploie seulement si les étapes précédentes ont réussi.
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: frontend/build # Le dossier que l'action doit déployer
