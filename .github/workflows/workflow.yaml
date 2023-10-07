@@ -4,47 +4,22 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
 jobs:
-  build-and-test:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    defaults:
-      run:
-        working-directory: ./frontend
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install Dependencies 🔧
-        run: npm ci
-
-      - name: Build 🚧
-        run: npm run build
-
-   #   - name: Test 🧪
-   #     uses: cypress-io/github-action@v6
-
-  Deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    defaults:
-      run:
+      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         working-directory: ./frontend
-    steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2
-
+        run: |
+            npm ci
+            npm run build
       - name: Deploy 🚀
-        if: success() # Déploie seulement si les étapes précédentes ont réussi.
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: frontend/build # Le dossier que l'action doit déployer
+          folder: frontend/build # The folder the action should deploy.
