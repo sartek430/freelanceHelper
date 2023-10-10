@@ -190,17 +190,28 @@ const Signup = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   onChange={handlePasswordChange}
-                  // Affiche une bordure rouge si le mot de passe est faible et verte s'il est fort
-                  borderColor={
-                    passwordStrengthScore <= 3 ? "red.500" : "green.500"
-                  }
+                  // Affiche une bordure rouge si le mot de passe est faible et verte s'il est fort et grise s'il est vide
                   focusBorderColor={
-                    passwordStrengthScore <= 3 ? "red.500" : "green.500"
+                    passwordStrengthScore <= 3
+                      ? "red.500"
+                      : password === ""
+                      ? "gray.500"
+                      : "green.500"
                   }
-                  _hover={{
-                    borderColor:
-                      passwordStrengthScore <= 3 ? "red.500" : "green.500",
-                  }}
+                  borderColor={
+                    passwordStrengthScore <= 3
+                      ? "red.500"
+                      : password === ""
+                      ? "gray.500"
+                      : "green.500"
+                  }
+                  _hover={
+                    passwordStrengthScore <= 3
+                      ? { borderColor: "red.500" }
+                      : password === ""
+                      ? { borderColor: "gray.500" }
+                      : { borderColor: "green.500" }
+                  }
                 />
                 {/* affiche un bouton qui affiche ou non le mot de passe */}
                 <InputRightElement width="auto" m="5px">
