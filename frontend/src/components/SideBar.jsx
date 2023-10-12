@@ -45,10 +45,43 @@ const SideBar = () => {
         flexDirection="column"
         padding={4}
         justifyContent={"space-between"}
+        transition="all 0.2s ease-out"
         onMouseEnter={() => setCollapse(false)}
         onMouseLeave={() => setCollapse(true)}
       >
         <Box w="full">
+          <Box>
+            <Link
+              href="/freelanceHelper"
+              as={Link}
+              display="flex"
+              alignItems="center"
+              fontWeight="bold"
+              whiteSpace="nowrap"
+              fontSize={24}
+              w="full"
+              color="brand.100"
+              _hover={{
+                color: "brand.500",
+                textDecoration: "none",
+                fontWeight: "bold",
+                fontSize: 24,
+                transition: "all 0.2s ease-out",
+              }}
+              justifyContent={"center"}
+            >
+              {!collapse ? <Text>Freelance Helper</Text> : <Text>FH</Text>}
+            </Link>
+          </Box>
+
+          <Box
+            h={1}
+            w={"80%"}
+            m={"auto"}
+            bg="brand.500"
+            borderRadius={10}
+            mb={5}
+          />
           <List>
             {items.map((item, index) => (
               <ListItem key={index}>
@@ -75,7 +108,6 @@ const NavItem = ({ item, isActive, collapse }) => {
     <Box
       display="flex"
       alignItems="center"
-      p={4}
       borderRadius={8}
       justifyContent="center"
       bg={isActive ? "gray.800" : ""}
@@ -85,6 +117,7 @@ const NavItem = ({ item, isActive, collapse }) => {
         as={Link}
         display="flex"
         gap={10}
+        p={4}
         alignItems="center"
         fontWeight="medium"
         w="full"
@@ -94,9 +127,18 @@ const NavItem = ({ item, isActive, collapse }) => {
           textDecoration: "none",
           fontWeight: "bold",
           fontSize: 18,
+          transition: "all 0.2s ease-out",
         }}
         justifyContent={collapse ? "center" : ""}
       >
+        <Box
+          w={2}
+          h={10}
+          position={"absolute"}
+          left={4}
+          bg={isActive ? "brand.500" : ""}
+          borderRadius="full"
+        />
         <List as={icon} fontSize={24} m={1} />
         {!collapse && <Text>{label}</Text>}
       </Link>
