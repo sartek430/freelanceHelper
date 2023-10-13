@@ -43,7 +43,7 @@ const SideBar = () => {
         bg="gray.900"
         alignItems="center"
         flexDirection="column"
-        padding={4}
+        p={4}
         justifyContent={"space-between"}
         transition="all 0.2s ease-out"
         onMouseEnter={() => setCollapse(false)}
@@ -65,7 +65,6 @@ const SideBar = () => {
                 color: "brand.500",
                 textDecoration: "none",
                 fontWeight: "bold",
-                fontSize: 24,
                 transition: "all 0.2s ease-out",
               }}
               justifyContent={"center"}
@@ -117,7 +116,7 @@ const NavItem = ({ item, isActive, collapse }) => {
         as={Link}
         display="flex"
         gap={10}
-        p={4}
+        p={collapse ? "28px" : "4"}
         alignItems="center"
         fontWeight="medium"
         w="full"
@@ -139,8 +138,8 @@ const NavItem = ({ item, isActive, collapse }) => {
           bg={isActive ? "brand.500" : ""}
           borderRadius="full"
         />
-        <List as={icon} fontSize={24} m={1} />
-        {!collapse && <Text>{label}</Text>}
+        <List as={icon} fontSize={24} position="absolute" m={1} />
+        {!collapse && <Text ml={collapse ? "" : "50px"}>{label}</Text>}
       </Link>
     </Box>
   );
