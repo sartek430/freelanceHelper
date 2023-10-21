@@ -8,5 +8,6 @@
     "vs-code-prettier-eslint.prettierLast": false,
     "[javascript]": {
       "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-    } // set as "true" to run 'prettier' last not first
+    },
+    "git.ignoreLimitWarning": true // set as "true" to run 'prettier' last not first
   }
