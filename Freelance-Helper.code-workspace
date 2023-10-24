@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "backend"
+		},
+		{
+			"path": "frontend"
+		}
+	],
+	"settings": {
+		"files.autoSave": "onFocusChange",
+		"vs-code-prettier-eslint.prettierLast": false,
+		"git.ignoreLimitWarning": true
+	}
+}

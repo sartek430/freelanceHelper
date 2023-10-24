@@ -1,0 +1,19 @@
+http:
+  host: 'localhost'
+  port: ${APP_PORT}
+
+authentication:
+  jwtOptions:
+    privateKeyPath: config/jwt/private.pem
+    publicKeyPath: config/jwt/public.pem
+    phrase: config/jwt/public.pem
+    algorithm: HS256,
+    expiresIn: 365d
+
+db:
+  postgres:
+    host: ${DATABASE_HOST}
+    port: ${DATABASE_PORT}
+    user: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    database: ${DATABASE_NAME}
