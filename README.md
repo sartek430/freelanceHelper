@@ -8,12 +8,12 @@ Pour installer ce projet sur votre système local, suivez ces étapes :
 
 1. Clonez ce dépôt sur votre machine en utilisant la commande suivante :
    ```bash
-   git clone https://github.com/votre-utilisateur/FreelanceHelper.git
+   git clone https://github.com/sartek430/freelanceHelper.git
    ```
 2. Accédez au répertoire du projet :
 
 ```bash
-cd freelanceHelper/frontend
+cd /frontend
 ```
 
 3. Installez les dépendances en utilisant npm ou yarn :
