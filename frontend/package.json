@@ -27,6 +27,8 @@
   },
   "scripts": {
     "predeploy": "npm run build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
     "deploy": "gh-pages -d build",
     "start": "vite",
     "build": "vite build",
