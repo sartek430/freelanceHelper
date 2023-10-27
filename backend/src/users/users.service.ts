@@ -34,8 +34,7 @@ export class UsersService {
   async findAll(inputQuery: ObjectLiteral): Promise<User[]> {
     const qb = this.usersRepository
       .createQueryBuilder('user')
-      .select(['user.id', 'user.name', 'user.email'])
-      .leftJoinAndSelect('user.widgets', 'widget');
+      .select(['user.id', 'user.name', 'user.email']);
 
     if (!!inputQuery.name)
       qb.where('user.name LIKE :name', { name: `%${inputQuery.name}%` });
