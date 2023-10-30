@@ -4,49 +4,60 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Bubble from "../components/Bubble";
 import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
-import supabase from "../config/supabaseClient";
 import { useColorModeValue } from "@chakra-ui/react";
+import axios from "axios";
+import { useToast } from "@chakra-ui/react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const signUpDivColor = useColorModeValue("#60656615", "#D9E4E505");
   const signUpDivBorderColor = useColorModeValue("#60656615", "#D9E4E505");
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const loginUser = async (event) => {
-    event.preventDefault();
+  const loginUser = async () => {
+    setLoginLoading(true);
     if (email === "" || password === "") {
-      console.error("Veuillez remplir tous les champs");
+      toast({
+        title: "Error",
+        description: "Please enter valid credentials.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setLoginLoading(false);
       return;
     }
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        console.error("Erreur de connexion:", error.message);
-        // Afficher un message d'erreur à l'utilisateur
-      } else {
-        navigate("/dashboard");
-        console.log("Utilisateur connecté avec succès:", data);
-        // Rediriger l'utilisateur vers une autre page ou effectuer d'autres actions après la connexion réussie
-      }
+      const response = await axios.post(
+        "http://localhost:3000/login",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Une erreur s'est produite:", error);
-      // Afficher un message d'erreur à l'utilisateur
+      toast({
+        title: "Error while logging in.",
+        description: error.response.data.message[0],
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      console.error(error.message);
     }
+    setLoginLoading(false);
   };
 
   return (
@@ -92,7 +103,7 @@ const Login = () => {
           </Text>
 
           <Flex position="absolute" top="30%" left="19%" w="300px">
-            <form onSubmit={loginUser}>
+            <Box>
               <Input
                 h="50"
                 marginBottom="8"
@@ -100,7 +111,12 @@ const Login = () => {
                 placeholder="Email"
                 focusBorderColor="gray.500"
                 borderColor="gray.500"
-                onChange={handleEmailChange}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    loginUser();
+                  }
+                }}
               />
 
               <Input
@@ -110,7 +126,12 @@ const Login = () => {
                 placeholder="Password"
                 focusBorderColor="gray.500"
                 borderColor="gray.500"
-                onChange={handlePasswordChange}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    loginUser();
+                  }
+                }}
               />
 
               <Flex justifyContent={"end"}>
@@ -134,12 +155,14 @@ const Login = () => {
                   transform: "scale(0.95)",
                 }}
                 type="submit"
+                isLoading={loginLoading}
+                onClick={() => loginUser()}
               >
                 Log In
               </Button>
 
               <Text textAlign="center">
-                <Text as="span">Don't have an account?</Text>{" "}
+                <Text as="span">Don&apos;t have an account?</Text>{" "}
                 <Link to="/signup">
                   <Text
                     as="span"
@@ -151,7 +174,7 @@ const Login = () => {
                   </Text>
                 </Link>
               </Text>
-            </form>
+            </Box>
           </Flex>
         </Flex>
       </motion.div>

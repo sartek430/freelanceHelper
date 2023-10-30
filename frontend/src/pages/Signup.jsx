@@ -13,19 +13,20 @@ import { Link, useNavigate } from "react-router-dom";
 import Bubble from "../components/Bubble";
 import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
 import { motion } from "framer-motion";
-import supabase from "../config/supabaseClient";
 import zxcvbn from "zxcvbn";
-import { isEmail } from "validator";
+import { isEmail, isStrongPassword } from "validator";
 import { useColorModeValue } from "@chakra-ui/react";
+import axios from "axios";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("Johe");
   const [passwordStrengthScore, setPasswordStrengthScore] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const [registerLoading, setRegisterLoading] = useState(false);
 
   const signUpDivColor = useColorModeValue("#60656615", "#D9E4E505");
   const signUpDivBorderColor = useColorModeValue("#60656615", "#D9E4E505");
@@ -36,97 +37,99 @@ const Signup = () => {
     "gray.600"
   );
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const isCreateUserConditionValid = () => {
+    if (
+      password !== "" &&
+      email !== "" &&
+      name !== "" &&
+      isEmail(email) &&
+      isStrongPassword(password)
+    ) {
+      return true;
+    } else {
+      toast({
+        title: "Error",
+        description: "Please enter valid credentials.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return false;
+    }
   };
 
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    setPasswordStrengthScore(zxcvbn(event.target.value).score);
-    setIsPasswordVisible(newPassword !== "");
+  const loginUser = async () => {
+    setRegisterLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/login",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+      localStorage.setItem("token", response.data.access_token);
+      setRegisterLoading(false);
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Error while logging in.",
+        description: error.response.data.message[0],
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setRegisterLoading(false);
+    }
   };
 
-  const createUser = async (event) => {
-    event.preventDefault();
-    // Vérifier que les champs ne sont pas vides
-    if (password === "" || email === "") {
-      toast({
-        title: "Empty field",
-        description: "Please fill in all the fields.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    // Vérifier que l'email est valide
-    if (!isEmail(email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    // Vérifier la force du mot de passe
-    if (passwordStrengthScore <= 3) {
-      toast({
-        title: "Password too weak",
-        description: "Your password must be stronger.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+  const createUser = async () => {
+    setRegisterLoading(true);
+    if (!isCreateUserConditionValid()) {
+      setRegisterLoading(false);
       return;
     }
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        // Afficher un message d'erreur à l'utilisateur et/ou gérer l'erreur
-        console.error("Error during user creation:", error.message);
-
-        if (error.message === "User already registered") {
-          toast({
-            title: "Error",
-            description: "This email is already registered.",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
+      await axios.post(
+        "http://localhost:3000/users",
+        {
+          name,
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "*",
+          },
         }
-      } else {
-        // Afficher un message de succès à l'utilisateur
-        console.log("User created with success:", data);
-
-        navigate("/dashboard");
-
-        toast({
-          title: "Account created",
-          description: "Your account was successfully created.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("Error ", error);
-
+      );
       toast({
-        title: "Error",
-        description: "An error has occurred.",
-        status: "error",
-        duration: 5000,
+        title: "Account created.",
+        description: "We are trying to connect you.",
+        status: "success",
+        duration: 3000,
         isClosable: true,
       });
-      // Afficher un message d'erreur à l'utilisateur
+      loginUser();
+    } catch (error) {
+      console.error("Error while creating user: ", error);
+      toast({
+        title: "Error while creating user.",
+        description: error.response.data.message[0],
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setRegisterLoading(false);
     }
   };
 
@@ -172,7 +175,22 @@ const Signup = () => {
           </Text>
 
           <Flex position="absolute" top="30%" left="19%" w="300px">
-            <form onSubmit={createUser}>
+            <Box>
+              <Input
+                h="50"
+                marginBottom="8"
+                type="text"
+                placeholder="Name"
+                focusBorderColor="gray.500"
+                borderColor="gray.500"
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    createUser();
+                  }
+                }}
+              />
+
               <Input
                 h="50"
                 marginBottom="8"
@@ -180,7 +198,12 @@ const Signup = () => {
                 placeholder="Email"
                 focusBorderColor="gray.500"
                 borderColor="gray.500"
-                onChange={handleEmailChange}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    createUser();
+                  }
+                }}
               />
 
               <InputGroup alignItems="center">
@@ -189,27 +212,35 @@ const Signup = () => {
                   marginBottom="4"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  onChange={handlePasswordChange}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordStrengthScore(zxcvbn(e.target.value).score);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      createUser();
+                    }
+                  }}
                   // Affiche une bordure rouge si le mot de passe est faible et verte s'il est fort et grise s'il est vide
                   focusBorderColor={
-                    passwordStrengthScore <= 3
-                      ? "red.500"
-                      : password === ""
+                    password.length === 0
                       ? "gray.500"
+                      : passwordStrengthScore <= 3
+                      ? "red.500"
                       : "green.500"
                   }
                   borderColor={
-                    passwordStrengthScore <= 3
-                      ? "red.500"
-                      : password === ""
+                    password.length === 0
                       ? "gray.500"
+                      : passwordStrengthScore <= 3
+                      ? "red.500"
                       : "green.500"
                   }
                   _hover={
-                    passwordStrengthScore <= 3
+                    password.length === 0
+                      ? { borderColor: "gray.600" }
+                      : passwordStrengthScore <= 3
                       ? { borderColor: "red.500" }
-                      : password === ""
-                      ? { borderColor: "gray.500" }
                       : { borderColor: "green.500" }
                   }
                 />
@@ -233,8 +264,8 @@ const Signup = () => {
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{
-                  y: isPasswordVisible ? 0 : -20,
-                  opacity: isPasswordVisible ? 1 : 0,
+                  y: password.length ? 0 : -20,
+                  opacity: password.length ? 1 : 0,
                 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
               >
@@ -262,7 +293,8 @@ const Signup = () => {
                   bg: "#4E44E1",
                   transform: "scale(0.95)",
                 }}
-                type="submit"
+                onClick={() => createUser()}
+                isLoading={registerLoading}
               >
                 Sign Up
               </Button>
@@ -282,10 +314,9 @@ const Signup = () => {
                   </Text>
                 </Link>
               </Text>
-            </form>
+            </Box>
           </Flex>
         </Flex>
-
         <Bubble />
       </motion.div>
     </Box>
