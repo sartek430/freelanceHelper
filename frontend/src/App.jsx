@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import ToggleColorModeButton from "./components/ToggleColorModeButton";
+import AuthWrapper from "./hooks/useCheckToken";
 
 function App() {
   return (
@@ -13,13 +14,19 @@ function App() {
       <Box minHeight="100vh">
         <ToggleColorModeButton />
         <Routes>
-          <Route path="/freelanceHelper" element={<Overview />} />{" "}
+          <Route path="/overview" element={<Overview />} />{" "}
           {/* Overview Page */}
           <Route path="/login" element={<Login />} /> {/* Login Page */}
           <Route path="/signup" element={<Signup />} /> {/* Signup Page*/}
           <Route path="*" element={<NotFound />} /> {/* Route 404 */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* Dashboard Page */}
+          <Route
+            path="/dashboard"
+            element={
+              <AuthWrapper>
+                <Dashboard />{" "}
+              </AuthWrapper>
+            }
+          />
         </Routes>
       </Box>
     </Router>
