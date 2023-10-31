@@ -45,7 +45,7 @@ const Login = () => {
           },
         }
       );
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.access_token);
       navigate("/dashboard");
     } catch (error) {
       toast({
@@ -133,12 +133,6 @@ const Login = () => {
                   }
                 }}
               />
-
-              <Flex justifyContent={"end"}>
-                <Link to="/dsqibh">
-                  <Text textDecoration={"underline"}>Forgot Password</Text>
-                </Link>
-              </Flex>
 
               <Button
                 h="50"
