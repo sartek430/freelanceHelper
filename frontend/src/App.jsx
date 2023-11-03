@@ -20,7 +20,7 @@ function App() {
           <Route path="/signup" element={<Signup />} /> {/* Signup Page*/}
           <Route path="*" element={<NotFound />} /> {/* Route 404 */}
           <Route
-            path="/dashboard"
+            path="/"
             element={
               <AuthWrapper>
                 <Dashboard />{" "}

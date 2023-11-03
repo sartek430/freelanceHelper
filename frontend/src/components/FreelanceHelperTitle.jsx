@@ -12,7 +12,7 @@ const FreelanceHelperTitle = () => {
         transition={{ duration: 1, ease: "circOut" }}
         whileHover={{ scale: 1.1, transition: { duration: 0.25 } }}
       >
-        <Link to="/freelanceHelper">
+        <Link to="/">
           <Text fontWeight="400" fontSize="30px" color="#4E44E1" m="10">
             FREELANCE HELPER
           </Text>

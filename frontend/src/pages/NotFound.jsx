@@ -60,7 +60,7 @@ const NotFound = () => {
           display="block"
           mt="20px"
         >
-          <Link to="/freelanceHelper">Go back to homepage</Link>
+          <Link to="/">Go back to homepage</Link>
         </Button>
       </motion.div>
     </Box>
