@@ -52,7 +52,7 @@ const SideBar = () => {
         <Box w="full">
           <Box>
             <Link
-              href="/freelanceHelper"
+              href="/"
               as={Link}
               display="flex"
               alignItems="center"
@@ -100,8 +100,10 @@ const SideBar = () => {
 
 export default SideBar;
 
+// eslint-disable-next-line react/prop-types
 const NavItem = ({ item, isActive, collapse }) => {
-  const { icon, label, path } = item;
+  // eslint-disable-next-line react/prop-types
+  const { label, path, icon } = item;
 
   return (
     <Box

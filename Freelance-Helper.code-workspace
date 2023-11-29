@@ -10,6 +10,14 @@
 	"settings": {
 		"files.autoSave": "onFocusChange",
 		"vs-code-prettier-eslint.prettierLast": false,
-		"git.ignoreLimitWarning": true
+		"git.ignoreLimitWarning": true,
+		"jest.disabledWorkspaceFolders": [
+			"frontend",
+		
+		],
+		"powermode.combo.location": "off",
+		"editor.cursorBlinking": "smooth",
+		"editor.cursorSmoothCaretAnimation": "on",
+		
 	}
 }

@@ -1,132 +1,93 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Text,
-  Flex,
-  Button,
-  Input,
-  InputGroup,
-  InputRightElement,
-  useToast,
-} from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Box, Text, Flex, useToast, useColorModeValue } from "@chakra-ui/react";
+import { BsArrowRightCircle } from "react-icons/bs";
 import Bubble from "../components/Bubble";
 import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
-import { motion } from "framer-motion";
-import supabase from "../config/supabaseClient";
-import zxcvbn from "zxcvbn";
-import { isEmail } from "validator";
-import { useColorModeValue } from "@chakra-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
+import axios from "axios";
+import FirstSignupForm from "../components/signupForm/FirstSignupForm";
+import SecondSignupForm from "../components/signupForm/SecondSignupForm";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordStrengthScore, setPasswordStrengthScore] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const toast = useToast();
+  const [name, setName] = useState("");
+  const [showSecondForm, setShowSecondForm] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const [rotateButton, setRotateButton] = useState(false);
+
   const navigate = useNavigate();
+
+  const toast = useToast();
 
   const signUpDivColor = useColorModeValue("#60656615", "#D9E4E505");
   const signUpDivBorderColor = useColorModeValue("#60656615", "#D9E4E505");
-  const showPasswordButtonColor = useColorModeValue("gray.300", "gray.700");
-  const showPasswordButtonTextColor = useColorModeValue("gray.900", "gray.100");
-  const showPasswordButtonHoverColor = useColorModeValue(
-    "gray.400",
-    "gray.600"
-  );
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handleFirstSignupFormChange = (data) => {
+    setEmail(data.email);
+    setPassword(data.password);
+    setName(data.name);
   };
 
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    setPasswordStrengthScore(zxcvbn(event.target.value).score);
-    setIsPasswordVisible(newPassword !== "");
+  const handleRegister = (data) => {
+    createUser(data.userType, email, password, name);
   };
 
-  const createUser = async (event) => {
-    event.preventDefault();
-    // Vérifier que les champs ne sont pas vides
-    if (password === "" || email === "") {
-      toast({
-        title: "Empty field",
-        description: "Please fill in all the fields.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
+  // Fonction qui permet de faire tourner la flèche de droite à gauche
+  const handleIconClick = () => {
+    showSecondSignupFormToggle();
+    setClickCount(clickCount + 1);
+    setRotateButton(true);
+    if (clickCount === 1) {
+      setTimeout(() => {
+        setRotateButton(false);
+        setClickCount(0);
+      }, 1000);
     }
-    // Vérifier que l'email est valide
-    if (!isEmail(email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    // Vérifier la force du mot de passe
-    if (passwordStrengthScore <= 3) {
-      toast({
-        title: "Password too weak",
-        description: "Your password must be stronger.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
+  };
 
+  // Fonction qui permet de faire apparaitre le second formulaire et de stocker le token
+  const showSecondSignupFormToggle = () => {
+    showSecondForm ? setShowSecondForm(false) : setShowSecondForm(true);
+  };
+
+  // Fonction qui permet de créer un utilisateur
+  const createUser = async (userType, email, password, name) => {
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        // Afficher un message d'erreur à l'utilisateur et/ou gérer l'erreur
-        console.error("Error during user creation:", error.message);
-
-        if (error.message === "User already registered") {
-          toast({
-            title: "Error",
-            description: "This email is already registered.",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
+      const response = await axios.post(
+        "http://localhost:3000/users",
+        {
+          name,
+          email,
+          password,
+          userType,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "*",
+          },
         }
-      } else {
-        // Afficher un message de succès à l'utilisateur
-        console.log("User created with success:", data);
-
-        navigate("/dashboard");
-
-        toast({
-          title: "Account created",
-          description: "Your account was successfully created.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("Error ", error);
-
+      );
+      localStorage.setItem("token", response.data);
+      navigate("/");
       toast({
-        title: "Error",
-        description: "An error has occurred.",
-        status: "error",
-        duration: 5000,
+        title: "Account created.",
+        status: "success",
+        duration: 3000,
         isClosable: true,
       });
-      // Afficher un message d'erreur à l'utilisateur
+    } catch (error) {
+      console.error("Error while creating user: ", error);
+      toast({
+        title: "Error while creating user.",
+        description: error.response.data.message[0],
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -145,6 +106,9 @@ const Signup = () => {
       >
         <Flex
           position="absolute"
+          alignItems={"center"}
+          justifyContent={"center"}
+          flexDirection={"column"}
           top="0"
           bottom="0"
           left="0"
@@ -165,124 +129,46 @@ const Signup = () => {
             bgClip="text"
             fontSize="30px"
             fontWeight="500"
-            top="15%"
-            left="19%"
+            top="10%"
+            margin={"auto"}
           >
             Create your account
           </Text>
 
-          <Flex position="absolute" top="30%" left="19%" w="300px">
-            <form onSubmit={createUser}>
-              <Input
-                h="50"
-                marginBottom="8"
-                type="email"
-                placeholder="Email"
-                focusBorderColor="gray.500"
-                borderColor="gray.500"
-                onChange={handleEmailChange}
-              />
+          {showSecondForm ? (
+            <SecondSignupForm onData={handleRegister} />
+          ) : (
+            <FirstSignupForm onData={handleFirstSignupFormChange} />
+          )}
 
-              <InputGroup alignItems="center">
-                <Input
-                  h="50"
-                  marginBottom="4"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  onChange={handlePasswordChange}
-                  // Affiche une bordure rouge si le mot de passe est faible et verte s'il est fort et grise s'il est vide
-                  focusBorderColor={
-                    passwordStrengthScore <= 3
-                      ? "red.500"
-                      : password === ""
-                      ? "gray.500"
-                      : "green.500"
-                  }
-                  borderColor={
-                    passwordStrengthScore <= 3
-                      ? "red.500"
-                      : password === ""
-                      ? "gray.500"
-                      : "green.500"
-                  }
-                  _hover={
-                    passwordStrengthScore <= 3
-                      ? { borderColor: "red.500" }
-                      : password === ""
-                      ? { borderColor: "gray.500" }
-                      : { borderColor: "green.500" }
-                  }
-                />
-                {/* affiche un bouton qui affiche ou non le mot de passe */}
-                <InputRightElement width="auto" m="5px">
-                  <Button
-                    onClick={() => setShowPassword(!showPassword)}
-                    bg={showPasswordButtonColor}
-                    _hover={{ bg: showPasswordButtonHoverColor }}
-                    _active={{ bg: showPasswordButtonHoverColor }}
-                    color={showPasswordButtonTextColor}
-                    border="1px solid"
-                    borderColor={showPasswordButtonColor}
-                    backdropFilter={"blur(10px)"}
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{
-                  y: isPasswordVisible ? 0 : -20,
-                  opacity: isPasswordVisible ? 1 : 0,
-                }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              >
-                <Text
-                  color={passwordStrengthScore <= 3 ? "#B7133A" : "green"}
-                  mb="4"
+          <Flex
+            onClick={handleIconClick}
+            _hover={{
+              cursor: "pointer",
+              fontSize: "65px",
+              marginLeft: "5px",
+              color: "brand.200",
+            }}
+            _active={{ fontSize: "60px" }}
+            fontSize={"60px"}
+            position={"absolute"}
+            left="110%"
+            zIndex={2}
+            transform={rotateButton ? "rotate(180deg)" : ""}
+            transition={"all 0.2s ease-out"}
+          >
+            <AnimatePresence>
+              {email && password && name && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
-                  {/** Affiche un message en fonction de la force du mot de passe */}
-                  {passwordStrengthScore <= 3
-                    ? "Password too weak"
-                    : "Password strong"}
-                </Text>
-              </motion.div>
-
-              <Button
-                h="50"
-                mb="10"
-                w="300px"
-                color="#FFFFFF"
-                variant="outline"
-                bg={"#4E44E1"}
-                _hover={{ bg: "#6B63EB", transform: "scale(1.05)" }}
-                border="none"
-                _active={{
-                  bg: "#4E44E1",
-                  transform: "scale(0.95)",
-                }}
-                type="submit"
-              >
-                Sign Up
-              </Button>
-
-              <Text textAlign="center">
-                <Text color="brand" as="span">
-                  Have an account?
-                </Text>{" "}
-                <Link to="/login">
-                  <Text
-                    as="span"
-                    color={"brand.500"}
-                    textDecoration={"underline"}
-                    fontWeight={"bold"}
-                  >
-                    Log In
-                  </Text>
-                </Link>
-              </Text>
-            </form>
+                  <BsArrowRightCircle />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Flex>
         </Flex>
 
