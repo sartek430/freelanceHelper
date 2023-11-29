@@ -1,25 +1,25 @@
 import React, { useState } from "react";
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, useToast, useColorModeValue } from "@chakra-ui/react";
 import { BsArrowRightCircle } from "react-icons/bs";
-//import { useNavigate } from "react-router-dom";
 import Bubble from "../components/Bubble";
 import FreelanceHelperTitle from "../components/FreelanceHelperTitle";
 import { AnimatePresence, motion } from "framer-motion";
-
-import { useColorModeValue } from "@chakra-ui/react";
-//import axios from "axios";
+import axios from "axios";
 import FirstSignupForm from "../components/signupForm/FirstSignupForm";
 import SecondSignupForm from "../components/signupForm/SecondSignupForm";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  //const toast = useToast();
-  // const navigate = useNavigate();
   const [showSecondForm, setShowSecondForm] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [rotateButton, setRotateButton] = useState(false);
+
+  const navigate = useNavigate();
+
+  const toast = useToast();
 
   const signUpDivColor = useColorModeValue("#60656615", "#D9E4E505");
   const signUpDivBorderColor = useColorModeValue("#60656615", "#D9E4E505");
@@ -30,99 +30,66 @@ const Signup = () => {
     setName(data.name);
   };
 
+  const handleRegister = (data) => {
+    createUser(data.userType, email, password, name);
+  };
+
+  // Fonction qui permet de faire tourner la flèche de droite à gauche
   const handleIconClick = () => {
-    // Incrémenter le compteur de clics
     showSecondSignupFormToggle();
     setClickCount(clickCount + 1);
     setRotateButton(true);
-    // Si c'est le deuxième clic
     if (clickCount === 1) {
       setTimeout(() => {
-        // Rotation d'un tour complet après un délai d'une seconde
         setRotateButton(false);
         setClickCount(0);
       }, 1000);
     }
   };
 
+  // Fonction qui permet de faire apparaitre le second formulaire et de stocker le token
   const showSecondSignupFormToggle = () => {
     showSecondForm ? setShowSecondForm(false) : setShowSecondForm(true);
   };
 
-  // const loginUser = async () => {
-  //   setRegisterLoading(true);
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:3000/login",
-  //       {
-  //         email,
-  //         password,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Origin": "*",
-  //         },
-  //       }
-  //     );
-  //     localStorage.setItem("token", response.data.access_token);
-  //     setRegisterLoading(false);
-  //     navigate("/dashboard");
-  //   } catch (error) {
-  //     toast({
-  //       title: "Error while logging in.",
-  //       description: error.response.data.message[0],
-  //       status: "error",
-  //       duration: 3000,
-  //       isClosable: true,
-  //     });
-  //     setRegisterLoading(false);
-  //   }
-  // };
-
-  // const createUser = async () => {
-  //   setRegisterLoading(true);
-  //   if (!isCreateUserConditionValid()) {
-  //     setRegisterLoading(false);
-  //     return;
-  //   }
-
-  //   try {
-  //     await axios.post(
-  //       "http://localhost:3000/users",
-  //       {
-  //         name,
-  //         email,
-  //         password,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Origin": "*",
-  //           "ngrok-skip-browser-warning": "*",
-  //         },
-  //       }
-  //     );
-  //     toast({
-  //       title: "Account created.",
-  //       description: "We are trying to connect you.",
-  //       status: "success",
-  //       duration: 3000,
-  //       isClosable: true,
-  //     });
-  //     loginUser();
-  //   } catch (error) {
-  //     console.error("Error while creating user: ", error);
-  //     toast({
-  //       title: "Error while creating user.",
-  //       description: error.response.data.message[0],
-  //       status: "error",
-  //       duration: 3000,
-  //       isClosable: true,
-  //     });
-  //     setRegisterLoading(false);
-  //   }
-  // };
+  // Fonction qui permet de créer un utilisateur
+  const createUser = async (userType, email, password, name) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/users",
+        {
+          name,
+          email,
+          password,
+          userType,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "*",
+          },
+        }
+      );
+      localStorage.setItem("token", response.data);
+      navigate("/");
+      toast({
+        title: "Account created.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error while creating user: ", error);
+      toast({
+        title: "Error while creating user.",
+        description: error.response.data.message[0],
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Box>
@@ -141,6 +108,7 @@ const Signup = () => {
           position="absolute"
           alignItems={"center"}
           justifyContent={"center"}
+          flexDirection={"column"}
           top="0"
           bottom="0"
           left="0"
@@ -162,12 +130,13 @@ const Signup = () => {
             fontSize="30px"
             fontWeight="500"
             top="10%"
-            left="19%"
+            margin={"auto"}
           >
             Create your account
           </Text>
+
           {showSecondForm ? (
-            <SecondSignupForm />
+            <SecondSignupForm onData={handleRegister} />
           ) : (
             <FirstSignupForm onData={handleFirstSignupFormChange} />
           )}

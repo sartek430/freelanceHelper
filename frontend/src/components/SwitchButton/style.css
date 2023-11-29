@@ -1,0 +1,30 @@
+.theme-checkbox {
+  margin-top: 10px;
+    appearance: none;
+    width: 7.25em;
+    height: 3.125em;
+    background: radial-gradient( circle, #E7E5FF 0%, #B4B0F4 100%);
+    transition: 0.4s;
+    border-radius: 99em;
+    position: relative;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .theme-checkbox::before {
+    content: "";
+    width: 2.25em;
+    height: 2.25em;
+    position: absolute;
+    top: 0.438em;
+    left: 0.438em;
+    background: radial-gradient(circle, #150C95 0%, #030033 100%);
+    border-radius: 99em;
+    transition: 0.4s;
+  }
+  
+  .theme-checkbox:checked::before {
+    left: calc(100% - 2.25em - 0.438em);
+  }
+  
+

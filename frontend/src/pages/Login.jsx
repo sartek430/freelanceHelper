@@ -46,7 +46,7 @@ const Login = () => {
         }
       );
       localStorage.setItem("token", response.data.access_token);
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       toast({
         title: "Error while logging in.",

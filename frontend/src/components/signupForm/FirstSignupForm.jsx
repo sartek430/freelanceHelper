@@ -20,7 +20,6 @@ const FirstSignupForm = (props) => {
   const [name, setName] = useState("");
   const [passwordStrengthScore, setPasswordStrengthScore] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  //const [registerLoading, setRegisterLoading] = useState(false);
   const showPasswordButtonColor = useColorModeValue("gray.300", "gray.700");
   const showPasswordButtonTextColor = useColorModeValue("gray.900", "gray.100");
   const showPasswordButtonHoverColor = useColorModeValue(

@@ -15,6 +15,9 @@
 			"frontend",
 		
 		],
+		"powermode.combo.location": "off",
+		"editor.cursorBlinking": "smooth",
+		"editor.cursorSmoothCaretAnimation": "on",
 		
 	}
 }
