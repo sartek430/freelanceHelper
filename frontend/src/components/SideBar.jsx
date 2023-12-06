@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Flex,
@@ -15,6 +15,16 @@ import { IoPersonOutline } from "react-icons/io5";
 const SideBar = () => {
   const [collapse, setCollapse] = React.useState(true);
 
+  const [activePage, setActivePage] = React.useState(0);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    console.log(path);
+    const index = items.findIndex((item) => item.path === path);
+    setActivePage(index);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const items = [
     {
       label: "Home",
@@ -23,7 +33,7 @@ const SideBar = () => {
     },
     {
       label: "Profile",
-      path: "freelanceHelper/profile",
+      path: "/profile",
       icon: IoPersonOutline,
     },
     {
@@ -86,7 +96,7 @@ const SideBar = () => {
               <ListItem key={index}>
                 <NavItem
                   item={item}
-                  isActive={index === 0}
+                  isActive={index === activePage}
                   collapse={collapse}
                 />
               </ListItem>
@@ -100,9 +110,7 @@ const SideBar = () => {
 
 export default SideBar;
 
-// eslint-disable-next-line react/prop-types
 const NavItem = ({ item, isActive, collapse }) => {
-  // eslint-disable-next-line react/prop-types
   const { label, path, icon } = item;
 
   return (

@@ -3,8 +3,9 @@ import { Box } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 import ToggleColorModeButton from "./components/ToggleColorModeButton";
 import AuthWrapper from "./hooks/useCheckToken";
 
@@ -23,7 +24,15 @@ function App() {
             path="/"
             element={
               <AuthWrapper>
-                <Dashboard />{" "}
+                <Dashboard />
+              </AuthWrapper>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <AuthWrapper>
+                <Profile />
               </AuthWrapper>
             }
           />
