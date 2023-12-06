@@ -13,7 +13,7 @@ import { LuSettings } from "react-icons/lu";
 import { IoPersonOutline } from "react-icons/io5";
 
 const SideBar = () => {
-  const [collapse, setCollapse] = React.useState(false);
+  const [collapse, setCollapse] = React.useState(true);
 
   const items = [
     {

@@ -34,7 +34,7 @@ const Signup = () => {
     createUser(data.userType, email, password, name);
   };
 
-  // Fonction qui permet de faire tourner la flèche de droite à gauche
+  //  Fonction qui permet de faire tourner la flèche de droite à gauche
   const handleIconClick = () => {
     showSecondSignupFormToggle();
     setClickCount(clickCount + 1);
